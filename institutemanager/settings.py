@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'roles',
     'lessongroups',
     'lessons',
+    'courses'
 ]
 
 MIDDLEWARE = [
