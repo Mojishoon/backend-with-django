@@ -7,8 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import LessonGroup
 
-from users.models import User
-
 from .serializers import LessonGroupSerializer
 
 from institutemanager.dependencies import pagination
@@ -35,9 +33,9 @@ class LessonGroupList(APIView):
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             serializer = LessonGroupSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.validated_data["recorder"] = User.objects.get(pk=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -60,10 +58,10 @@ class LessonGroupDetail(APIView):
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             lesson_group = LessonGroup.objects.get(pk=pk)
             serializer = LessonGroupSerializer(lesson_group, data=request.data)
             if serializer.is_valid():
-                serializer.validated_data["recorder"] = User.objects.get(pk=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

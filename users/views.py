@@ -7,8 +7,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from roles.models import Role
-
 from .models import User
 
 from django.db.models import Q
@@ -43,6 +41,8 @@ class UserList(APIView):
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
+            request.data["password"] = make_password(request.data["password"])
             existed_user = User.objects.filter(phone_number = request.data['phone_number'], is_active = False).first()
             if existed_user:
                 serializer = UserSerializer(existed_user, data = request.data)
@@ -51,10 +51,6 @@ class UserList(APIView):
                     return Response(serializer.data, status = status.HTTP_201_CREATED)
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid():
-                if "role" in request.data:
-                    serializer.validated_data["role"] = Role.objects.get(id=request.data["role"])
-                serializer.validated_data["recorder"] = User.objects.get(id=request.user.id)
-                serializer.validated_data["password"] = make_password(request.data["password"])
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -64,6 +60,7 @@ class UserList(APIView):
     def put(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             user = User.objects.get(phone_number = request.data['phone_number'])
             if "password" in request.data:
                 request.data["password"] = make_password(request.data["password"])
@@ -73,11 +70,6 @@ class UserList(APIView):
             user_data.update(request.data)
             serializer = UserSerializer(user, data=user_data)
             if serializer.is_valid():
-                if "role" in request.data:
-                    serializer.validated_data["role"] = Role.objects.get(id=user_data["role"])
-                else:
-                    serializer.validated_data["role"] = Role.objects.get(id=user_data["role"]["id"])
-                serializer.validated_data["recorder"] = User.objects.get(id=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status = status.HTTP_202_ACCEPTED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

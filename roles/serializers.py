@@ -13,8 +13,9 @@ class SimpleUserSerializer(serializers.ModelSerializer):
                   'last_login']
 
 class RoleSerializer(serializers.ModelSerializer):
-    recorder = SimpleUserSerializer(many=False, read_only=True)
+    recorder_id = serializers.IntegerField(required=False, write_only=True)
+    recorder = SimpleUserSerializer('recorder_id' , many=False, read_only=True)
 
     class Meta:
         model = Role
-        fields = ['id', 'name', 'record_date', 'recorder']
+        fields = ['id', 'name', 'record_date', 'recorder', 'recorder_id']

@@ -9,9 +9,7 @@ from .models import Course
 
 from lessons.models import Lesson
 
-from users.models import User
-
-from .serializers import CourseSerializer
+from .serializers import CourseSerializer, CourseUpdateSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -28,8 +26,8 @@ class CourseList(APIView):
         q = request.query_params.get('q')
         lesson = request.query_params.get('lesson')
         if q or lesson:
-            criteria = (Q(name__contains=q) &
-                        Q(lesson=q))
+            criteria = ((Q(name__contains=q) if q else Q()) &
+                        (Q(lesson=lesson) if lesson else Q()))
         else:
             criteria = Q()
         paginated_lesson = pagination(Course, size, page, criteria)
@@ -39,10 +37,9 @@ class CourseList(APIView):
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             serializer = CourseSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.validated_data["lesson"] = Lesson.objects.get(pk=request.data["lesson"])
-                serializer.validated_data["recorder"] = User.objects.get(pk=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -65,21 +62,16 @@ class CourseDetail(APIView):
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             course = Course.objects.get(pk=pk)
-            course_data = CourseSerializer(course).data
+            course_data = CourseUpdateSerializer(course).data
             course_data.update(request.data)
-            serializer = CourseSerializer(course, data=course_data)
+            serializer = CourseUpdateSerializer(course, data=course_data)
             if serializer.is_valid():
-                if "lesson" in request.data:
-                    serializer.validated_data["lesson"] = Lesson.objects.get(pk=course_data["lesson"])
-                else:
-                    serializer.validated_data["lesson"] = Lesson.objects.get(
-                        pk=course_data["lesson"]["id"])
-                serializer.validated_data["recorder"] = User.objects.get(pk=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Lesson.DoesNotExist:
+        except Course.DoesNotExist:
             return Response({"error": "course not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)

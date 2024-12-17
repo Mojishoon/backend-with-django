@@ -22,9 +22,14 @@ class SimpleLessonSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    lesson = SimpleLessonSerializer(many=False, read_only=True)
-    recorder = SimpleUserSerializer(many=False, read_only=True)
+    lesson_id = serializers.IntegerField(write_only=True)
+    lesson = SimpleLessonSerializer('lesson_id' , many=False, read_only=True)
+    recorder_id = serializers.IntegerField(write_only=True, required=False)
+    recorder = SimpleUserSerializer('recorder_id' , many=False, read_only=True)
 
     class Meta:
         model = Course
-        fields = ['id', 'name', 'record_date', 'lesson', 'recorder']
+        fields = ['id', 'name', 'record_date', 'lesson', 'recorder', 'lesson_id', 'recorder_id']
+
+class CourseUpdateSerializer(CourseSerializer):
+    lesson_id = serializers.IntegerField(write_only=True, required=False)

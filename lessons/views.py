@@ -7,11 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Lesson
 
-from lessongroups.models import LessonGroup
-
-from users.models import User
-
-from .serializers import LessonSerializer
+from .serializers import LessonSerializer, LessonUpdateSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -28,8 +24,8 @@ class LessonList(APIView):
         q = request.query_params.get('q')
         lesson_group = request.query_params.get('lesson_group')
         if q or lesson_group:
-            criteria = (Q(name__contains=q) &
-                        Q(lessongroup=q))
+            criteria = ((Q(name__contains=q) if q else Q()) &
+                        (Q(lesson_group=lesson_group) if lesson_group else Q()))
         else:
             criteria = Q()
         paginated_lesson = pagination(Lesson, size, page, criteria)
@@ -39,10 +35,9 @@ class LessonList(APIView):
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             serializer = LessonSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.validated_data["lesson_group"] = LessonGroup.objects.get(pk=request.data["lesson_group"])
-                serializer.validated_data["recorder"] = User.objects.get(pk=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -65,17 +60,12 @@ class LessonDetail(APIView):
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             lesson = Lesson.objects.get(pk=pk)
-            lesson_data = LessonSerializer(lesson).data
+            lesson_data = LessonUpdateSerializer(lesson).data
             lesson_data.update(request.data)
-            serializer = LessonSerializer(lesson, data=lesson_data)
+            serializer = LessonUpdateSerializer(lesson, data=lesson_data)
             if serializer.is_valid():
-                if "lesson_group" in request.data:
-                    serializer.validated_data["lesson_group"] = LessonGroup.objects.get(pk=lesson_data["lesson_group"])
-                else:
-                    serializer.validated_data["lesson_group"] = LessonGroup.objects.get(
-                        pk=lesson_data["lesson_group"]["id"])
-                serializer.validated_data["recorder"] = User.objects.get(pk=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

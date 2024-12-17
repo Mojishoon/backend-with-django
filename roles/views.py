@@ -15,7 +15,6 @@ from django.db.models import Q
 
 from django.db import IntegrityError
 
-from users.models import User
 
 class RoleList(APIView):
     permission_classes = [IsAuthenticated]
@@ -35,9 +34,9 @@ class RoleList(APIView):
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             serializer = RoleSerializer(data=request.data)
             if serializer.is_valid():
-                serializer.validated_data["recorder"] = User.objects.get(id=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -60,12 +59,12 @@ class RoleDetail(APIView):
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
+            request.data["recorder_id"] = request.user.id
             role = Role.objects.get(pk=pk)
             role_data = RoleSerializer(role).data
             role_data.update(request.data)
             serializer = RoleSerializer(role, data=role_data)
             if serializer.is_valid():
-                serializer.validated_data["recorder"] = User.objects.get(id=request.user.id)
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
