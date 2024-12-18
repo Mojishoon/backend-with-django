@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'courseprerequisites',
     'buildings',
     'classrooms',
-    'presentations'
+    'presentations',
+    'selectedpresentations'
 ]
 
 MIDDLEWARE = [

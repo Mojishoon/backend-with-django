@@ -28,5 +28,6 @@ urlpatterns = [
     path('course-prerequisites/', include('courseprerequisites.urls')),
     path('buildings/', include('buildings.urls')),
     path('classrooms/', include('classrooms.urls')),
-    path('presentations/', include('presentations.urls'))
+    path('presentations/', include('presentations.urls')),
+    path('selected-presentations/', include('selectedpresentations.urls'))
 ]
