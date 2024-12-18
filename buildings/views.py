@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import LessonGroup
+from .models import Building
 
-from .serializers import LessonGroupSerializer
+from .serializers import BuildingSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -15,7 +15,7 @@ from django.db.models import Q
 
 from django.db import IntegrityError
 
-class LessonGroupList(APIView):
+class BuildingList(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
@@ -26,15 +26,15 @@ class LessonGroupList(APIView):
             criteria = Q(name__contains=q)
         else:
             criteria = Q()
-        paginated_lesson_group = pagination(LessonGroup, size, page, criteria)
-        serializer = LessonGroupSerializer(paginated_lesson_group, many=True)
+        paginated_lesson_group = pagination(Building, size, page, criteria)
+        serializer = BuildingSerializer(paginated_lesson_group, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
             request.data["recorder_id"] = request.user.id
-            serializer = LessonGroupSerializer(data=request.data)
+            serializer = BuildingSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -44,36 +44,36 @@ class LessonGroupList(APIView):
 
 
 
-class LessonGroupDetail(APIView):
+class BuildingDetail(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         try:
-            lesson_group = LessonGroup.objects.get(pk=pk)
-            serializer = LessonGroupSerializer(lesson_group)
+            building = Building.objects.get(pk=pk)
+            serializer = BuildingSerializer(building)
             return Response(serializer.data)
-        except LessonGroup.DoesNotExist:
-            return Response({"error": "lesson group not found"} ,status=status.HTTP_404_NOT_FOUND)
+        except Building.DoesNotExist:
+            return Response({"error": "building not found"} ,status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
             request.data["recorder_id"] = request.user.id
-            lesson_group = LessonGroup.objects.get(pk=pk)
-            serializer = LessonGroupSerializer(lesson_group, data=request.data)
+            building = Building.objects.get(pk=pk)
+            serializer = BuildingSerializer(building, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except LessonGroup.DoesNotExist:
-            return Response({"error": "lesson group not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Building.DoesNotExist:
+            return Response({"error": "building not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
-            lesson_group = LessonGroup.objects.get(pk=pk)
-            lesson_group.delete()
-            return Response({"massage": "lesson group deleted"}, status=status.HTTP_204_NO_CONTENT)
-        except LessonGroup.DoesNotExist:
-            return Response({"error": "lesson group not found"}, status=status.HTTP_404_NOT_FOUND)
+            building = Building.objects.get(pk=pk)
+            building.delete()
+            return Response({"massage": "building deleted"}, status=status.HTTP_204_NO_CONTENT)
+        except Building.DoesNotExist:
+            return Response({"error": "building not found"}, status=status.HTTP_404_NOT_FOUND)
