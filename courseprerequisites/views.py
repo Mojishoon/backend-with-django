@@ -28,8 +28,8 @@ class CoursePrerequisiteList(APIView):
                         (Q(prerequisite=prerequisite) if prerequisite else Q()))
         else:
             criteria = Q()
-        paginated_lesson = pagination(CoursePrerequisite, size, page, criteria)
-        serializer = CoursePrerequisiteSerializer(paginated_lesson, many=True)
+        paginated_course_prerequisite = pagination(CoursePrerequisite, size, page, criteria)
+        serializer = CoursePrerequisiteSerializer(paginated_course_prerequisite, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
     def post(self, request):

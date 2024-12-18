@@ -30,8 +30,8 @@ class CourseList(APIView):
                         (Q(lesson=lesson) if lesson else Q()))
         else:
             criteria = Q()
-        paginated_lesson = pagination(Course, size, page, criteria)
-        serializer = CourseSerializer(paginated_lesson, many=True)
+        paginated_course = pagination(Course, size, page, criteria)
+        serializer = CourseSerializer(paginated_course, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
     def post(self, request):

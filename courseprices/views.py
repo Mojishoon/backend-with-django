@@ -38,8 +38,8 @@ class CoursePriceList(APIView):
                         (Q(private_price__lte=to_price) if to_price else Q()))
         else:
             criteria = Q()
-        paginated_lesson = pagination(CoursePrice, size, page, criteria)
-        serializer = CoursePriceSerializer(paginated_lesson, many=True)
+        paginated_course_price = pagination(CoursePrice, size, page, criteria)
+        serializer = CoursePriceSerializer(paginated_course_price, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
     def post(self, request):
