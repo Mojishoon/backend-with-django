@@ -10,15 +10,13 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'phone_number', 'first_name', 'last_name', 'father_name', 'gender', 'role', 'date_of_birth',
-                  'national_code', 'recruitment_date', 'is_superuser', 'is_staff', 'is_active', 'record_date',
-                  'recorder', 'last_login']
+        fields = ['id', 'first_name', 'last_name', 'role', 'date_of_birth', 'is_superuser', 'is_staff']
 
 class SimplePresentationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Presentation
-        fields = '__all__'
+        fields = ['id', 'course', 'teacher', 'is_private', 'start_date', 'end_date']
 
 
 class SimpleStudentSerializer(serializers.ModelSerializer):

@@ -29,5 +29,6 @@ urlpatterns = [
     path('buildings/', include('buildings.urls')),
     path('classrooms/', include('classrooms.urls')),
     path('presentations/', include('presentations.urls')),
-    path('selected-presentations/', include('selectedpresentations.urls'))
+    path('selected-presentations/', include('selectedpresentations.urls')),
+    path('presentation-sessions/', include('presentationsessions.urls'))
 ]

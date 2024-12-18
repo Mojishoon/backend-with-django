@@ -9,9 +9,7 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'phone_number', 'first_name', 'last_name', 'father_name', 'gender', 'role', 'date_of_birth',
-                  'national_code', 'recruitment_date', 'is_superuser', 'is_staff', 'is_active', 'record_date',
-                  'recorder', 'last_login']
+        fields = ['id', 'first_name', 'last_name', 'role', 'date_of_birth', 'is_superuser', 'is_staff']
 
 class LessonGroupSerializer(serializers.ModelSerializer):
     recorder_id = serializers.IntegerField(required=False, write_only=True)

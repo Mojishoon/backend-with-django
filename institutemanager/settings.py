@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'buildings',
     'classrooms',
     'presentations',
-    'selectedpresentations'
+    'selectedpresentations',
+    'presentationsessions',
 ]
 
 MIDDLEWARE = [
