@@ -13,6 +13,13 @@ class SimpleUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'first_name', 'last_name', 'role', 'date_of_birth', 'is_superuser', 'is_staff']
 
 
+class SimpleStudentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'last_name']
+
+
 class SimplePresentationSessionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -25,7 +32,7 @@ class RollCallSerializer(serializers.ModelSerializer):
     presentation_session = SimplePresentationSessionSerializer(
         'presentation_session_id' , many=False, read_only=True)
     student_id = serializers.IntegerField(write_only=True)
-    student = SimpleUserSerializer('student_id', many=False, read_only=True)
+    student = SimpleStudentSerializer('student_id', many=False, read_only=True)
     recorder_id = serializers.IntegerField(write_only=True, required=False)
     recorder = SimpleUserSerializer('recorder_id' , many=False, read_only=True)
 
