@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'presentations',
     'selectedpresentations',
     'presentationsessions',
-    'rollcalls'
+    'rollcalls',
+    'surveycategories'
 ]
 
 MIDDLEWARE = [

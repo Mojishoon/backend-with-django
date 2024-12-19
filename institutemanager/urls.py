@@ -31,5 +31,6 @@ urlpatterns = [
     path('presentations/', include('presentations.urls')),
     path('selected-presentations/', include('selectedpresentations.urls')),
     path('presentation-sessions/', include('presentationsessions.urls')),
-    path('roll-calls/', include('rollcalls.urls'))
+    path('roll-calls/', include('rollcalls.urls')),
+    path('survey-categories/', include('surveycategories.urls'))
 ]
