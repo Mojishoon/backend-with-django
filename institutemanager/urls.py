@@ -35,5 +35,6 @@ urlpatterns = [
     path('survey-categories/', include('surveycategories.urls')),
     path('presentation-surveys/', include('presentationsurveys.urls')),
     path('exams/', include('exams.urls')),
-    path('exam-schedules/', include('examschedules.urls'))
+    path('exam-schedules/', include('examschedules.urls')),
+    path('selected-exams/', include('selectedexams.urls'))
 ]
