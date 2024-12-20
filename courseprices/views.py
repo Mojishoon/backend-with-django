@@ -7,8 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import CoursePrice
 
-from courses.models import Course
-
 from .serializers import CoursePriceSerializer, CoursePriceUpdateSerializer
 
 from institutemanager.dependencies import pagination
@@ -86,7 +84,7 @@ class CoursePriceDetail(APIView):
 
     def delete(self, request, pk):
         try:
-            course_price = Course.objects.get(pk=pk)
+            course_price = CoursePrice.objects.get(pk=pk)
             course_price.delete()
             return Response({"massage": "course price deleted"}, status=status.HTTP_204_NO_CONTENT)
         except CoursePrice.DoesNotExist:

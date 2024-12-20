@@ -33,5 +33,7 @@ urlpatterns = [
     path('presentation-sessions/', include('presentationsessions.urls')),
     path('roll-calls/', include('rollcalls.urls')),
     path('survey-categories/', include('surveycategories.urls')),
-    path('presentation-surveys/', include('presentationsurveys.urls'))
+    path('presentation-surveys/', include('presentationsurveys.urls')),
+    path('exams/', include('exams.urls')),
+    path('exam-schedules/', include('examschedules.urls'))
 ]
