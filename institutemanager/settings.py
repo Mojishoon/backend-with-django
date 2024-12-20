@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'exams',
     'examschedules',
     'selectedexams',
-    'financialcategories'
+    'financialcategories',
+    'paycategories'
 ]
 
 MIDDLEWARE = [
