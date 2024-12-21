@@ -38,5 +38,6 @@ urlpatterns = [
     path('exam-schedules/', include('examschedules.urls')),
     path('selected-exams/', include('selectedexams.urls')),
     path('financial-categories/', include('financialcategories.urls')),
-    path('pay-categories/', include('paycategories.urls'))
+    path('pay-categories/', include('paycategories.urls')),
+    path('financial-transactions/', include('financialtransactions.urls'))
 ]
