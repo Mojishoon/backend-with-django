@@ -27,15 +27,12 @@ class PresentationSessionList(APIView):
         end_time = request.query_params.get('end_time')
         is_cancelled = request.query_params.get('is_cancelled')
         is_extra = request.query_params.get('is_extra')
-        if presentation or classroom or start_time or end_time or is_cancelled or is_extra:
-            criteria = ((Q(presentation=presentation) if presentation else Q()) &
-                        (Q(classroom=classroom) if classroom else Q()) &
-                        (Q(start_time__gte=start_time) if start_time else Q()) &
-                        (Q(end_time__lte=end_time) if end_time else Q()) &
-                        (Q(is_cancelled=is_cancelled) if is_cancelled else Q())&
-                        (Q(is_extra=is_extra) if is_extra else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(presentation=presentation) if presentation else Q()) &
+                    (Q(classroom=classroom) if classroom else Q()) &
+                    (Q(start_time__gte=start_time) if start_time else Q()) &
+                    (Q(end_time__lte=end_time) if end_time else Q()) &
+                    (Q(is_cancelled=is_cancelled) if is_cancelled else Q())&
+                    (Q(is_extra=is_extra) if is_extra else Q()))
         paginated_presentation_session = pagination(PresentationSession, size, page, criteria)
         serializer = PresentationSessionSerializer(paginated_presentation_session, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

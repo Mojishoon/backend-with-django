@@ -22,10 +22,7 @@ class SurveyCategoryList(APIView):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
         q = request.query_params.get('q')
-        if q:
-            criteria = Q(name__contains=q)
-        else:
-            criteria = Q()
+        criteria = Q(name__contains=q) if q else Q()
         paginated_survey_category = pagination(SurveyCategory, size, page, criteria)
         serializer = SurveyCategorySerializer(paginated_survey_category, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

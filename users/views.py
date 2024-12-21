@@ -25,15 +25,12 @@ class UserList(APIView):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
         q = request.query_params.get('q')
-        if q:
-            criteria = (Q(is_active = True) &
-                        (Q(first_name__contains=q) |
-                        Q(last_name__contains=q) |
-                        Q(father_name__contains=q) |
-                        Q(national_code__contains=q) |
-                        Q(phone_number__contains=q)))
-        else:
-            criteria = Q(is_active = True)
+        criteria = (Q(is_active = True) &
+                    (Q(first_name__contains=q) |
+                    Q(last_name__contains=q) |
+                    Q(father_name__contains=q) |
+                    Q(national_code__contains=q) |
+                    Q(phone_number__contains=q))) if q else Q(is_active = True)
         paginated_users = pagination(User, size, page, criteria)
         serializer = UserSerializer(paginated_users, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

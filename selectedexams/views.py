@@ -23,11 +23,8 @@ class SelectedExamList(APIView):
         page = request.query_params.get('page', 1)
         exam_schedule = request.query_params.get('exam')
         student = request.query_params.get('student')
-        if student or exam_schedule:
-            criteria = ((Q(student=student) if student else Q()) &
-                        (Q(exam_schedule=exam_schedule) if exam_schedule else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(student=student) if student else Q()) &
+                    (Q(exam_schedule=exam_schedule) if exam_schedule else Q()))
         paginated_selected_exam = pagination(SelectedExam, size, page, criteria)
         serializer = SelectedExamSerializer(paginated_selected_exam, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

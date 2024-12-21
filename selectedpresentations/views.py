@@ -23,11 +23,8 @@ class SelectedPresentationList(APIView):
         page = request.query_params.get('page', 1)
         presentation = request.query_params.get('presentation')
         student = request.query_params.get('student')
-        if student or presentation:
-            criteria = ((Q(student=student) if student else Q()) &
-                        (Q(presentation=presentation) if presentation else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(student=student) if student else Q()) &
+                    (Q(presentation=presentation) if presentation else Q()))
         paginated_selected_presentation = pagination(SelectedPresentation, size, page, criteria)
         serializer = SelectedPresentationSerializer(paginated_selected_presentation, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

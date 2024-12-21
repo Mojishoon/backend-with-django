@@ -26,14 +26,11 @@ class PresentationList(APIView):
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
         is_private = request.query_params.get('is_private')
-        if teacher or course or from_date or to_date or is_private:
-            criteria = ((Q(course=course) if course else Q()) &
-                        (Q(teacher=teacher) if teacher else Q()) &
-                        (Q(start_date__gte=from_date) if from_date else Q()) &
-                        (Q(end_date__lte=to_date) if to_date else Q()) &
-                        (Q(is_private=is_private) if is_private else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(course=course) if course else Q()) &
+                    (Q(teacher=teacher) if teacher else Q()) &
+                    (Q(start_date__gte=from_date) if from_date else Q()) &
+                    (Q(end_date__lte=to_date) if to_date else Q()) &
+                    (Q(is_private=is_private) if is_private else Q()))
         paginated_presentation = pagination(Presentation, size, page, criteria)
         serializer = PresentationSerializer(paginated_presentation, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

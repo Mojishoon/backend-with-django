@@ -25,11 +25,8 @@ class CourseList(APIView):
         page = request.query_params.get('page', 1)
         q = request.query_params.get('q')
         lesson = request.query_params.get('lesson')
-        if q or lesson:
-            criteria = ((Q(name__contains=q) if q else Q()) &
-                        (Q(lesson=lesson) if lesson else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(name__contains=q) if q else Q()) &
+                    (Q(lesson=lesson) if lesson else Q()))
         paginated_course = pagination(Course, size, page, criteria)
         serializer = CourseSerializer(paginated_course, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

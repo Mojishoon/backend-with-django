@@ -26,16 +26,13 @@ class CoursePriceList(APIView):
         to_price = request.query_params.get('to_price')
         from_date = request.query_params.get('from_date')
         to_date = request.query_params.get('to_date')
-        if from_price or to_price or from_date or to_date or course:
-            criteria = ((Q(course=course) if course else Q()) &
-                        (Q(date__gte=from_date) if from_date else Q()) &
-                        (Q(date__lte=to_date) if to_date else Q()) &
-                        (Q(public_price__gte=from_price) if from_price else Q()) &
-                        (Q(private_price__gte=from_price) if from_price else Q()) &
-                        (Q(public_price__lte=to_price) if to_price else Q()) |
-                        (Q(private_price__lte=to_price) if to_price else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(course=course) if course else Q()) &
+                    (Q(date__gte=from_date) if from_date else Q()) &
+                    (Q(date__lte=to_date) if to_date else Q()) &
+                    (Q(public_price__gte=from_price) if from_price else Q()) &
+                    (Q(private_price__gte=from_price) if from_price else Q()) &
+                    (Q(public_price__lte=to_price) if to_price else Q()) |
+                    (Q(private_price__lte=to_price) if to_price else Q()))
         paginated_course_price = pagination(CoursePrice, size, page, criteria)
         serializer = CoursePriceSerializer(paginated_course_price, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

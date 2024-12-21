@@ -15,5 +15,8 @@ class FinancialTransaction(models.Model):
     recorder = models.ForeignKey('users.User', on_delete=models.RESTRICT, null=False)
     record_date = models.DateField()
 
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name
+
     class Meta:
         db_table = 'financial_transaction'

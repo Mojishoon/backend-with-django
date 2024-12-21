@@ -23,11 +23,8 @@ class CoursePrerequisiteList(APIView):
         page = request.query_params.get('page', 1)
         course = request.query_params.get('course')
         prerequisite = request.query_params.get('prerequisite')
-        if prerequisite or course:
-            criteria = ((Q(course=course) if course else Q()) &
-                        (Q(prerequisite=prerequisite) if prerequisite else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(course=course) if course else Q()) &
+                    (Q(prerequisite=prerequisite) if prerequisite else Q()))
         paginated_course_prerequisite = pagination(CoursePrerequisite, size, page, criteria)
         serializer = CoursePrerequisiteSerializer(paginated_course_prerequisite, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

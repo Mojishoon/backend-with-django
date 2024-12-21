@@ -10,7 +10,7 @@ class SelectedExam(models.Model):
     record_date = models.DateField()
 
     def __str__(self):
-        return self.student.name
+        return self.student.first_name + " " + self.student.last_name
 
     class Meta:
         db_table = 'selected_exams'

@@ -24,12 +24,9 @@ class ClassroomList(APIView):
         q = request.query_params.get('q')
         building = request.query_params.get('building')
         lesson_group = request.query_params.get('lesson_group')
-        if q or lesson_group or building:
-            criteria = ((Q(name__contains=q) if q else Q()) &
-                        (Q(building=building) if building else Q()) &
-                        (Q(lesson_group=lesson_group) if lesson_group else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(name__contains=q) if q else Q()) &
+                    (Q(building=building) if building else Q()) &
+                    (Q(lesson_group=lesson_group) if lesson_group else Q()))
         paginated_classroom = pagination(Classroom, size, page, criteria)
         serializer = ClassroomSerializer(paginated_classroom, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

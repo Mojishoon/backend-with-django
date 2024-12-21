@@ -22,10 +22,7 @@ class ExamList(APIView):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
         course = request.query_params.get('course')
-        if course:
-            criteria = (Q(course=course))
-        else:
-            criteria = Q()
+        criteria = Q(course=course) if course else Q()
         paginated_exam = pagination(Exam, size, page, criteria)
         serializer = ExamSerializer(paginated_exam, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

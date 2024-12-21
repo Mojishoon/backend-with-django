@@ -22,10 +22,7 @@ class ExamScheduleList(APIView):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
         exam = request.query_params.get('exam')
-        if exam:
-            criteria = (Q(exam=exam))
-        else:
-            criteria = Q()
+        criteria = Q(exam=exam) if exam else Q()
         paginated_exam_schedule = pagination(ExamSchedule, size, page, criteria)
         serializer = ExamScheduleSerializer(paginated_exam_schedule, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

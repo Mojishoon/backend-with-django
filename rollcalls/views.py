@@ -24,12 +24,9 @@ class RollCallList(APIView):
         presentation_session = request.query_params.get('presentation_session')
         student = request.query_params.get('student')
         is_present = request.query_params.get('is_present')
-        if student or presentation_session or is_present:
-            criteria = ((Q(student=student) if student else Q()) &
-                        (Q(presentation_session=presentation_session) if presentation_session else Q()) &
-                        (Q(is_present=is_present) if is_present else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(student=student) if student else Q()) &
+                    (Q(presentation_session=presentation_session) if presentation_session else Q()) &
+                    (Q(is_present=is_present) if is_present else Q()))
         paginated_roll_call = pagination(RollCall, size, page, criteria)
         serializer = RollCallSerializer(paginated_roll_call, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

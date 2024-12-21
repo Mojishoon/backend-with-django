@@ -39,5 +39,6 @@ urlpatterns = [
     path('selected-exams/', include('selectedexams.urls')),
     path('financial-categories/', include('financialcategories.urls')),
     path('pay-categories/', include('paycategories.urls')),
-    path('financial-transactions/', include('financialtransactions.urls'))
+    path('financial-transactions/', include('financialtransactions.urls')),
+    path('holidays/', include('holidays.urls'))
 ]

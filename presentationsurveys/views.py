@@ -24,12 +24,9 @@ class PresentationSurveyList(APIView):
         presentation = request.query_params.get('presentation')
         student = request.query_params.get('student')
         survey_category = request.query_params.get('survey_category')
-        if student or presentation or survey_category:
-            criteria = ((Q(student=student) if student else Q()) &
-                        (Q(presentation=presentation) if presentation else Q()) &
-                        (Q(survey_category=survey_category) if survey_category else Q()))
-        else:
-            criteria = Q()
+        criteria = ((Q(student=student) if student else Q()) &
+                    (Q(presentation=presentation) if presentation else Q()) &
+                    (Q(survey_category=survey_category) if survey_category else Q()))
         paginated_presentation_survey = pagination(PresentationSurvey, size, page, criteria)
         serializer = PresentationSurveySerializer(paginated_presentation_survey, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
