@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('permissions/', include('permissions.urls')),
+    path('permission-groups/', include('permissiongroups.urls')),
     path('roles/', include('roles.urls')),
     path('lesson-groups/', include('lessongroups.urls')),
     path('lessons/', include('lessons.urls')),
