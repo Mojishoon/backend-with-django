@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'permissions',
     'permissiongroups',
+    'permissiongroupdefines',
     'roles',
     'lessongroups',
     'lessons',
