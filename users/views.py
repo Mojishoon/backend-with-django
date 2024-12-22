@@ -7,11 +7,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
-from .models import User
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+
+from .models import User, LoginLog
 
 from django.db.models import Q
 
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserLoginSerializer, LoginLogSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -98,3 +100,31 @@ class UserDetail(APIView):
                 return Response({"message": "User deleted"}, status=status.HTTP_204_NO_CONTENT)
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UserLogin(APIView):
+
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        token = AccessToken.for_user(user)
+        refresh = RefreshToken.for_user(user)
+        data = serializer.data
+        data["tokens"] = {"refresh": str(refresh), "access": str(token)}
+        LoginLog.objects.create(user = user, login_date = datetime.now())
+        User.objects.filter(pk=user.pk).update(last_login = datetime.now())
+        return Response(data, status=status.HTTP_200_OK)
+
+
+class LoginLogList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        size = request.query_params.get('size', 20)
+        page = request.query_params.get('page', 1)
+        user = request.query_params.get('user')
+        criteria = Q(user=user) if user else Q()
+        paginated_login_log = pagination(LoginLog, size, page, criteria)
+        serializer = LoginLogSerializer(paginated_login_log, many=True)
+        return Response(serializer.data + [{"size": size, "page": page}])

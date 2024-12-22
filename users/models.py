@@ -6,7 +6,6 @@ from django.db import models
 
 from datetime import datetime
 
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -64,3 +63,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = 'users'
 
 
+class LoginLog(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.RESTRICT, null=False)
+    login_date = models.DateTimeField()
+
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name
+
+    class Meta:
+        db_table = 'login_logs'

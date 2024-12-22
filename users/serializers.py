@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
+from django.contrib.auth import authenticate
+
 from django.core import validators
 
 from roles.models import Role
 
-from .models import User
+from .models import User, LoginLog
 
 class SimpleUserSerializer(serializers.ModelSerializer):
 
@@ -34,3 +36,24 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'phone_number', 'first_name', 'last_name', 'father_name', 'gender', 'role', 'date_of_birth',
                   'national_code', 'recruitment_date', 'is_superuser', 'is_staff', 'is_active', 'record_date','last_login',
                   'password', 'recorder', 'recorder_id', 'role_id']
+
+
+class UserLoginSerializer(serializers.Serializer):
+
+    phone_number = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")
+
+
+class LoginLogSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(required=False, write_only=True)
+    user = SimpleUserSerializer('user_id' , many=False, read_only=True)
+
+    class Meta:
+        model = LoginLog
+        fields = ['id', 'login_date', 'user', 'user_id']
