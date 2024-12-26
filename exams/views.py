@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Exam
 
-from .serializers import ExamSerializer, ExamUpdateSerializer
+from .serializers import ExamSerializer, ExamUpdateSerializer, ExamRequestSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -18,6 +19,7 @@ from django.db import IntegrityError
 class ExamList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[OpenApiParameter('size'), OpenApiParameter('page'), OpenApiParameter('course')])
     def get(self, request):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
@@ -27,6 +29,8 @@ class ExamList(APIView):
         serializer = ExamSerializer(paginated_exam, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
+
+    @extend_schema(request=ExamRequestSerializer)
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -37,7 +41,7 @@ class ExamList(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -52,6 +56,7 @@ class ExamDetail(APIView):
         except Exam.DoesNotExist:
             return Response({"error": "exam not found"} ,status=status.HTTP_404_NOT_FOUND)
 
+    @extend_schema(request=ExamRequestSerializer)
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -67,12 +72,14 @@ class ExamDetail(APIView):
         except Exam.DoesNotExist:
             return Response({"error": "exam not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
             exam = Exam.objects.get(pk=pk)
             exam.delete()
-            return Response({"massage": "exam deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"massage": "exam deleted"}, status=status.HTTP_202_ACCEPTED)
         except Exam.DoesNotExist:
             return Response({"error": "exam not found"}, status=status.HTTP_404_NOT_FOUND)
+        except IntegrityError as e:
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)

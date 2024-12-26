@@ -43,3 +43,9 @@ class ClassroomSerializer(serializers.ModelSerializer):
 
 class ClassroomUpdateSerializer(ClassroomSerializer):
     building_id = serializers.IntegerField(write_only=True, required=False)
+
+class ClassroomRequestSerializer(ClassroomSerializer):
+
+    class Meta:
+        model = Classroom
+        fields = ['name', 'capacity', 'floor', 'lesson_group_id', 'building_id']

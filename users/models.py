@@ -6,6 +6,8 @@ from django.db import models
 
 from datetime import datetime
 
+from permissiongroupdefines.models import PermissionGroupDefine
+
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -41,6 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     father_name = models.CharField(max_length=30)
     gender = models.CharField(max_length=10, choices=(('M', 'Male'), ('F', 'Female')))
     role = models.ForeignKey('roles.Role', blank=True, null=True, on_delete=models.RESTRICT, default=None)
+    permission_group = models.ForeignKey('permissiongroups.PermissionGroup', blank=True, null=True,
+                                         on_delete=models.RESTRICT, default=None)
     date_of_birth = models.DateField()
     national_code = models.CharField(max_length=10, unique=True)
     recruitment_date = models.DateField()
@@ -49,6 +53,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     record_date = models.DateField()
     recorder = models.ForeignKey('self', blank=True, null=True, on_delete=models.RESTRICT, default=None)
+
 
     USERNAME_FIELD = 'phone_number'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'father_name', 'gender', 'date_of_birth', 'national_code',
@@ -61,6 +66,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'users'
+
+    @property
+    def permissions_list(self) -> list[str]:
+        if pgd := PermissionGroupDefine.objects.filter(permission_group=self.permission_group).all():
+            return [p.permission.name for p in pgd]
 
 
 class LoginLog(models.Model):

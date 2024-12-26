@@ -43,3 +43,10 @@ class SelectedPresentationSerializer(serializers.ModelSerializer):
 class SelectedPresentationUpdateSerializer(SelectedPresentationSerializer):
     presentation_id = serializers.IntegerField(write_only=True, required=False)
     student_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class SelectedPresentationRequestSerializer(SelectedPresentationSerializer):
+
+    class Meta:
+        model = SelectedPresentation
+        fields = ['grade', 'presentation_id', 'student_id']

@@ -18,3 +18,10 @@ class FinancialCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = FinancialCategory
         fields = ['id', 'name', 'record_date', 'recorder', 'recorder_id']
+
+
+class FinancialCategoryRequestSerializer(FinancialCategorySerializer):
+
+    class Meta:
+        model = FinancialCategory
+        fields = ['name']

@@ -18,3 +18,10 @@ class LessonGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonGroup
         fields = ['id', 'name', 'record_date', 'recorder', 'recorder_id']
+
+
+class LessonGroupRequestSerializer(LessonGroupSerializer):
+
+    class Meta:
+        model = LessonGroup
+        fields = ['name']

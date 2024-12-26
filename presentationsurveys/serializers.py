@@ -55,3 +55,10 @@ class PresentationSurveyUpdateSerializer(PresentationSurveySerializer):
     presentation_id = serializers.IntegerField(write_only=True, required=False)
     student_id = serializers.IntegerField(write_only=True, required=False)
     survey_category_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class PresentationSurveyRequestSerializer(PresentationSurveySerializer):
+
+    class Meta:
+        model = PresentationSurvey
+        fields = ['score', 'student_id', 'presentation_id', 'survey_category_id',]

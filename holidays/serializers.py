@@ -18,3 +18,10 @@ class HolidaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Holiday
         fields = ['id', 'holiday_date', 'record_date', 'recorder', 'recorder_id']
+
+
+class HolidayRequestSerializer(HolidaySerializer):
+
+    class Meta:
+        model = Holiday
+        fields = ['holiday_date']

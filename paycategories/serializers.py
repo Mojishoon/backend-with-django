@@ -18,3 +18,10 @@ class PayCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PayCategory
         fields = ['id', 'name', 'record_date', 'recorder', 'recorder_id']
+
+
+class PayCategoryRequestSerializer(PayCategorySerializer):
+
+    class Meta:
+        model = PayCategory
+        fields = ['name']

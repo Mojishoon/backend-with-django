@@ -18,3 +18,10 @@ class PermissionGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = PermissionGroup
         fields = ['id', 'name', 'record_date', 'recorder', 'recorder_id']
+
+
+class PermissionGroupRequestSerializer(PermissionGroupSerializer):
+
+    class Meta:
+        model = PermissionGroup
+        fields = ['name']

@@ -43,3 +43,10 @@ class SelectedExamSerializer(serializers.ModelSerializer):
 class SelectedExamUpdateSerializer(SelectedExamSerializer):
     exam_schedule_id = serializers.IntegerField(write_only=True, required=False)
     student_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class SelectedExamRequestSerializer(SelectedExamSerializer):
+
+    class Meta:
+        model = SelectedExam
+        fields = ['grade', 'is_participated', 'student_id', 'exam_schedule_id']

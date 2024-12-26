@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import CoursePrice
 
-from .serializers import CoursePriceSerializer, CoursePriceUpdateSerializer
+from .serializers import CoursePriceSerializer, CoursePriceUpdateSerializer, CoursePriceRequestSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -18,6 +19,9 @@ from django.db import IntegrityError
 class CoursePriceList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[OpenApiParameter('size'), OpenApiParameter('page'), OpenApiParameter('course'),
+                               OpenApiParameter('from_price'), OpenApiParameter('to_price'),
+                               OpenApiParameter('from_date', datetime), OpenApiParameter('to_date', datetime),])
     def get(self, request):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
@@ -37,6 +41,8 @@ class CoursePriceList(APIView):
         serializer = CoursePriceSerializer(paginated_course_price, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
+
+    @extend_schema(request=CoursePriceRequestSerializer)
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -47,7 +53,7 @@ class CoursePriceList(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -62,6 +68,8 @@ class CoursePriceDetail(APIView):
         except CoursePrice.DoesNotExist:
             return Response({"error": "course price not found"} ,status=status.HTTP_404_NOT_FOUND)
 
+
+    @extend_schema(request=CoursePriceRequestSerializer)
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -77,12 +85,12 @@ class CoursePriceDetail(APIView):
         except CoursePrice.DoesNotExist:
             return Response({"error": "course price not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
             course_price = CoursePrice.objects.get(pk=pk)
             course_price.delete()
-            return Response({"massage": "course price deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"massage": "course price deleted"}, status=status.HTTP_202_ACCEPTED)
         except CoursePrice.DoesNotExist:
             return Response({"error": "course price not found"}, status=status.HTTP_404_NOT_FOUND)

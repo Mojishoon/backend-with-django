@@ -31,3 +31,10 @@ class LessonSerializer(serializers.ModelSerializer):
 
 class LessonUpdateSerializer(LessonSerializer):
     lesson_group_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class LessonRequestSerializer(LessonSerializer):
+
+    class Meta:
+        model = Lesson
+        fields = ['name', 'lesson_group_id' ]

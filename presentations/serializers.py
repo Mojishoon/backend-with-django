@@ -43,3 +43,10 @@ class PresentationSerializer(serializers.ModelSerializer):
 class PresentationUpdateSerializer(PresentationSerializer):
     course_id = serializers.IntegerField(write_only=True, required=False)
     teacher_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class PresentationRequestSerializer(PresentationSerializer):
+
+    class Meta:
+        model = Presentation
+        fields = ['is_private', 'session_count', 'start_date', 'end_date', 'teacher_id', 'course_id',]

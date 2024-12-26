@@ -17,3 +17,10 @@ class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = ['id', 'name', 'record_date', 'recorder', 'recorder_id']
+
+
+class RoleRequestSerializer(RoleSerializer):
+
+    class Meta:
+        model = Role
+        fields = ['name']

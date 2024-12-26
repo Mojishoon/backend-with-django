@@ -32,3 +32,10 @@ class ExamSerializer(serializers.ModelSerializer):
 
 class ExamUpdateSerializer(ExamSerializer):
     course_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class ExamRequestSerializer(ExamSerializer):
+
+    class Meta:
+        model = Exam
+        fields = ['price', 'course_id']

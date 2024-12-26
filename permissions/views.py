@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,11 +15,12 @@ from django.db.models import Q
 class PermissionList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[OpenApiParameter('page'), OpenApiParameter('size'), OpenApiParameter('search')])
     def get(self, request):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
-        q = request.query_params.get('q')
-        criteria = Q(name__contains=q) if q else Q()
+        search = request.query_params.get('search')
+        criteria = Q(name__contains=search) if search else Q()
         paginated_permission = pagination(Permission, size, page, criteria)
         serializer = PermissionSerializer(paginated_permission, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])

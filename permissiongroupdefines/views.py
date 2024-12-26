@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import PermissionGroupDefine
 
-from .serializers import PermissionGroupDefineSerializer, PermissionGroupDefineUpdateSerializer
+from .serializers import (PermissionGroupDefineSerializer, PermissionGroupDefineUpdateSerializer,
+                          PermissionGroupDefineRequestSerializer)
 
 from institutemanager.dependencies import pagination
 
@@ -18,6 +20,8 @@ from django.db import IntegrityError
 class PermissionGroupDefineList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[OpenApiParameter('page'), OpenApiParameter('size'), OpenApiParameter('permission'),
+                               OpenApiParameter('permission_group')])
     def get(self, request):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
@@ -29,6 +33,8 @@ class PermissionGroupDefineList(APIView):
         serializer = PermissionGroupDefineSerializer(paginated_permission_group_define, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
+
+    @extend_schema(request=PermissionGroupDefineRequestSerializer)
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -39,7 +45,7 @@ class PermissionGroupDefineList(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PermissionGroupDefineDetail(APIView):
@@ -53,6 +59,8 @@ class PermissionGroupDefineDetail(APIView):
         except PermissionGroupDefine.DoesNotExist:
             return Response({"error": "permission group define not found"} ,status=status.HTTP_404_NOT_FOUND)
 
+
+    @extend_schema(request=PermissionGroupDefineRequestSerializer)
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -69,12 +77,14 @@ class PermissionGroupDefineDetail(APIView):
         except PermissionGroupDefine.DoesNotExist:
             return Response({"error": "permission group define not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
             permission_group_define = PermissionGroupDefine.objects.get(pk=pk)
             permission_group_define.delete()
-            return Response({"massage": "permission group define deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"massage": "permission group define deleted"}, status=status.HTTP_202_ACCEPTED)
         except PermissionGroupDefine.DoesNotExist:
             return Response({"error": "permission group define not found"}, status=status.HTTP_404_NOT_FOUND)
+        except IntegrityError as e:
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)

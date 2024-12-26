@@ -45,3 +45,10 @@ class PresentationSessionSerializer(serializers.ModelSerializer):
 class PresentationSessionUpdateSerializer(PresentationSessionSerializer):
     presentation_id = serializers.IntegerField(write_only=True, required=False)
     classroom_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class PresentationSessionRequestSerializer(PresentationSessionSerializer):
+
+    class Meta:
+        model = PresentationSession
+        fields = ['start_time', 'end_time', 'is_cancelled', 'is_extra', 'presentation_id', 'classroom_id',]

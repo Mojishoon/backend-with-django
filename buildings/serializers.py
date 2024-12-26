@@ -17,4 +17,10 @@ class BuildingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Building
-        fields = ['id', 'name', 'location', 'record_date', 'recorder', 'recorder_id']
+        fields = ['id', 'name', 'location', 'recorder', 'recorder_id', 'record_date']
+
+class BuildingRequestSerializer(serializers.ModelSerializer):
+
+     class Meta:
+         model = Building
+         fields = ['name', 'location']

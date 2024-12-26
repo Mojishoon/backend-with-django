@@ -32,3 +32,10 @@ class ExamScheduleSerializer(serializers.ModelSerializer):
 
 class ExamScheduleUpdateSerializer(ExamScheduleSerializer):
     exam_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class ExamScheduleRequestSerializer(ExamScheduleSerializer):
+
+    class Meta:
+        model = ExamSchedule
+        fields = ['start_date', 'exam_id']

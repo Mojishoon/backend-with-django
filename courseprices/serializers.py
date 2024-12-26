@@ -33,3 +33,10 @@ class CoursePriceSerializer(serializers.ModelSerializer):
 
 class CoursePriceUpdateSerializer(CoursePriceSerializer):
     course_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class CoursePriceRequestSerializer(CoursePriceSerializer):
+
+    class Meta:
+        model = CoursePrice
+        fields = ['public_price', 'private_price', 'date', 'duration', 'course_id',]

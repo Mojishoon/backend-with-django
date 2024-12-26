@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import FinancialCategory
 
-from .serializers import FinancialCategorySerializer
+from .serializers import FinancialCategorySerializer, FinancialCategoryRequestSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -18,15 +19,18 @@ from django.db import IntegrityError
 class FinancialCategoryList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[OpenApiParameter('page'), OpenApiParameter('size'), OpenApiParameter('search')])
     def get(self, request):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
-        q = request.query_params.get('q')
-        criteria = Q(name__contains=q) if q else Q()
+        search = request.query_params.get('search')
+        criteria = Q(name__contains=search) if search else Q()
         paginated_financial_category = pagination(FinancialCategory, size, page, criteria)
         serializer = FinancialCategorySerializer(paginated_financial_category, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
+
+    @extend_schema(request=FinancialCategoryRequestSerializer)
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -37,7 +41,7 @@ class FinancialCategoryList(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -52,6 +56,8 @@ class FinancialCategoryDetail(APIView):
         except FinancialCategory.DoesNotExist:
             return Response({"error": "financial category not found"} ,status=status.HTTP_404_NOT_FOUND)
 
+
+    @extend_schema(request=FinancialCategoryRequestSerializer)
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -65,12 +71,14 @@ class FinancialCategoryDetail(APIView):
         except FinancialCategory.DoesNotExist:
             return Response({"error": "financial category not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
             financial_category = FinancialCategory.objects.get(pk=pk)
             financial_category.delete()
-            return Response({"massage": "financial category deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"massage": "financial category deleted"}, status=status.HTTP_202_ACCEPTED)
         except FinancialCategory.DoesNotExist:
             return Response({"error": "financial category not found"}, status=status.HTTP_404_NOT_FOUND)
+        except IntegrityError as e:
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)

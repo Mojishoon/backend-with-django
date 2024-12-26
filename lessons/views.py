@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Lesson
 
-from .serializers import LessonSerializer, LessonUpdateSerializer
+from .serializers import LessonSerializer, LessonUpdateSerializer, LessonRequestSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -18,17 +19,21 @@ from django.db import IntegrityError
 class LessonList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[OpenApiParameter('page'), OpenApiParameter('size'), OpenApiParameter('search'),
+                               OpenApiParameter('lesson_group')])
     def get(self, request):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
-        q = request.query_params.get('q')
+        search = request.query_params.get('search')
         lesson_group = request.query_params.get('lesson_group')
-        criteria = ((Q(name__contains=q) if q else Q()) &
+        criteria = ((Q(name__contains=search) if search else Q()) &
                     (Q(lesson_group=lesson_group) if lesson_group else Q()))
         paginated_lesson = pagination(Lesson, size, page, criteria)
         serializer = LessonSerializer(paginated_lesson, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
+
+    @extend_schema(request=LessonRequestSerializer)
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -39,7 +44,7 @@ class LessonList(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -54,6 +59,8 @@ class LessonDetail(APIView):
         except Lesson.DoesNotExist:
             return Response({"error": "lesson not found"} ,status=status.HTTP_404_NOT_FOUND)
 
+
+    @extend_schema(request=LessonRequestSerializer)
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -69,12 +76,14 @@ class LessonDetail(APIView):
         except Lesson.DoesNotExist:
             return Response({"error": "lesson not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
             lesson = Lesson.objects.get(pk=pk)
             lesson.delete()
-            return Response({"massage": "lesson deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"massage": "lesson deleted"}, status=status.HTTP_202_ACCEPTED)
         except Lesson.DoesNotExist:
             return Response({"error": "lesson not found"}, status=status.HTTP_404_NOT_FOUND)
+        except IntegrityError as e:
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)

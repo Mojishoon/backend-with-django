@@ -45,3 +45,10 @@ class RollCallSerializer(serializers.ModelSerializer):
 class RollCallUpdateSerializer(RollCallSerializer):
     presentation_session_id = serializers.IntegerField(write_only=True, required=False)
     student_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class RollCallRequestSerializer(RollCallSerializer):
+
+    class Meta:
+        model = RollCall
+        fields = ['is_present', 'delay', 'comment', 'student_id', 'presentation_session_id']

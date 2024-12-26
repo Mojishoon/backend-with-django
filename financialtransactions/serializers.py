@@ -67,12 +67,12 @@ class FinancialTransactionSerializer(serializers.ModelSerializer):
     user = SimpleUserSerializer('lesson_group_id' , many=False, read_only=True)
     financial_category_id = serializers.IntegerField(write_only=True)
     financial_category = SimpleFinancialCategorySerializer('financial_category' , many=False, read_only=True)
-    presentation_id = serializers.IntegerField(write_only=True, allow_null=True)
+    presentation_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
     presentation = SimplePresentationSerializer('presentation' , many=False, read_only=True)
-    selected_presentation_id = serializers.IntegerField(write_only=True, allow_null=True)
+    selected_presentation_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
     selected_presentation = SimpleSelectedPresentationSerializer('selected_presentation', many=False,
                                                                  read_only=True)
-    selected_exam_id = serializers.IntegerField(write_only=True, allow_null=True)
+    selected_exam_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
     selected_exam = SimpleSelectedExamSerializer('selected_exam', many=False, read_only=True)
     pay_category_id = serializers.IntegerField(write_only=True)
     pay_category = SimplePayCategorySerializer('pay_category', many=False, read_only=True)
@@ -89,8 +89,13 @@ class FinancialTransactionSerializer(serializers.ModelSerializer):
 class FinancialTransactionUpdateSerializer(FinancialTransactionSerializer):
     user_id = serializers.IntegerField(write_only=True, required=False)
     financial_category_id = serializers.IntegerField(write_only=True, required=False)
-    presentation_id = serializers.IntegerField(write_only=True, required=False)
-    selected_presentation_id = serializers.IntegerField(write_only=True, required=False)
-    selected_exam_id = serializers.IntegerField(write_only=True, required=False)
     pay_category_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class FinancialTransactionRequestSerializer(FinancialTransactionSerializer):
+
+    class Meta:
+        model = FinancialTransaction
+        fields = ['amount', 'transaction_date', 'pay_reference', 'user_id', 'financial_category_id',
+                  'presentation_id', 'selected_presentation_id', 'selected_exam_id', 'pay_category_id',]
 

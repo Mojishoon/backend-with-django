@@ -16,3 +16,4 @@ class RollCall(models.Model):
 
     class Meta:
         db_table = 'roll_calls'
+        unique_together = ('student', 'presentation_session')

@@ -35,3 +35,10 @@ class CoursePrerequisiteSerializer(serializers.ModelSerializer):
 class CoursePrerequisiteUpdateSerializer(CoursePrerequisiteSerializer):
     course_id = serializers.IntegerField(write_only=True, required=False)
     prerequisite_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class CoursePrerequisiteRequestSerializer(CoursePrerequisiteSerializer):
+
+    class Meta:
+        model = CoursePrerequisite
+        fields = ['course_id', 'prerequisite_id']

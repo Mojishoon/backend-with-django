@@ -45,3 +45,10 @@ class PermissionGroupDefineSerializer(serializers.ModelSerializer):
 class PermissionGroupDefineUpdateSerializer(PermissionGroupDefineSerializer):
     permission_id = serializers.IntegerField(write_only=True, required=False)
     permission_group_id = serializers.IntegerField(write_only=True, required=False)
+
+
+class PermissionGroupDefineRequestSerializer(PermissionGroupDefineSerializer):
+
+    class Meta:
+        model = PermissionGroupDefine
+        fields = ['permission_id', 'permission_group_id']

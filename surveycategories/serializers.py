@@ -18,3 +18,10 @@ class SurveyCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SurveyCategory
         fields = ['id', 'name', 'record_date', 'recorder', 'recorder_id']
+
+
+class SurveyCategoryRequestSerializer(SurveyCategorySerializer):
+
+    class Meta:
+        model = SurveyCategory
+        fields = ['name']

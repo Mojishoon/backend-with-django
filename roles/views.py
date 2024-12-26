@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Role
 
-from .serializers import RoleSerializer
+from .serializers import RoleSerializer, RoleRequestSerializer
 
 from institutemanager.dependencies import pagination
 
@@ -19,15 +20,18 @@ from django.db import IntegrityError
 class RoleList(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(parameters=[OpenApiParameter('page'), OpenApiParameter('size'), OpenApiParameter('search')])
     def get(self, request):
         size = request.query_params.get('size', 20)
         page = request.query_params.get('page', 1)
-        q = request.query_params.get('q')
-        criteria = Q(name__contains=q) if q else Q()
+        search = request.query_params.get('search')
+        criteria = Q(name__contains=search) if search else Q()
         paginated_roles = pagination(Role, size, page, criteria)
         serializer = RoleSerializer(paginated_roles, many=True)
         return Response(serializer.data + [{"size": size, "page": page}])
 
+
+    @extend_schema(request=RoleRequestSerializer)
     def post(self, request):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -38,7 +42,7 @@ class RoleList(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -53,6 +57,8 @@ class RoleDetail(APIView):
         except Role.DoesNotExist:
             return Response({"error": "role not found"} ,status=status.HTTP_404_NOT_FOUND)
 
+
+    @extend_schema(request=RoleRequestSerializer)
     def put(self, request, pk):
         try:
             request.data["record_date"] = datetime.today().strftime('%Y-%m-%d')
@@ -68,13 +74,15 @@ class RoleDetail(APIView):
         except Role.DoesNotExist:
             return Response({"error": "role not found"}, status=status.HTTP_404_NOT_FOUND)
         except IntegrityError as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
             role = Role.objects.get(pk=pk)
             role.delete()
-            return Response({"massage": "role deleted"}, status=status.HTTP_204_NO_CONTENT)
+            return Response({"massage": "role deleted"}, status=status.HTTP_202_ACCEPTED)
         except Role.DoesNotExist:
             return Response({"error": "role not found"}, status=status.HTTP_404_NOT_FOUND)
+        except IntegrityError as e:
+            return Response({"error": f"{e.args}"}, status=status.HTTP_400_BAD_REQUEST)
 

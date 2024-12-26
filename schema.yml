@@ -1,0 +1,2091 @@
+openapi: 3.0.3
+info:
+  title: Institute Manager
+  version: 1.0.0
+  description: An API that can help you manage your educational institution
+paths:
+  /buildings/:
+    get:
+      operationId: buildings_retrieve
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+      - in: query
+        name: size
+        schema:
+          type: string
+      tags:
+      - buildings
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: buildings_create
+      tags:
+      - buildings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BuildingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BuildingRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /buildings/{id}/:
+    get:
+      operationId: buildings_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - buildings
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: buildings_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - buildings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BuildingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BuildingRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: buildings_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - buildings
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /classrooms/:
+    get:
+      operationId: classrooms_retrieve
+      parameters:
+      - in: query
+        name: building
+        schema:
+          type: string
+      - in: query
+        name: lesson_group
+        schema:
+          type: string
+      - in: query
+        name: page
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+      - in: query
+        name: size
+        schema:
+          type: string
+      tags:
+      - classrooms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: classrooms_create
+      tags:
+      - classrooms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassroomRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /classrooms/{id}/:
+    get:
+      operationId: classrooms_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - classrooms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: classrooms_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - classrooms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassroomUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClassroomUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClassroomUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: classrooms_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - classrooms
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /course-prerequisites/:
+    get:
+      operationId: course_prerequisites_retrieve
+      parameters:
+      - in: query
+        name: course
+        schema:
+          type: string
+      - in: query
+        name: page
+        schema:
+          type: string
+      - in: query
+        name: prerequisite
+        schema:
+          type: string
+      - in: query
+        name: size
+        schema:
+          type: string
+      tags:
+      - course-prerequisites
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: course_prerequisites_create
+      tags:
+      - course-prerequisites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoursePrerequisiteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CoursePrerequisiteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CoursePrerequisiteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: course_prerequisites_update
+      parameters:
+      - in: query
+        name: course
+        schema:
+          type: string
+      - in: query
+        name: prerequisite
+        schema:
+          type: string
+      tags:
+      - course-prerequisites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoursePrerequisiteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CoursePrerequisiteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CoursePrerequisiteRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: course_prerequisites_destroy
+      tags:
+      - course-prerequisites
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /course-prices/:
+    get:
+      operationId: course_prices_retrieve
+      tags:
+      - course-prices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: course_prices_create
+      tags:
+      - course-prices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /course-prices/{id}/:
+    get:
+      operationId: course_prices_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - course-prices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: course_prices_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - course-prices
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: course_prices_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - course-prices
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /courses/:
+    get:
+      operationId: courses_retrieve
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: courses_create
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /courses/{id}/:
+    get:
+      operationId: courses_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: courses_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: courses_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - courses
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /exam-schedules/:
+    get:
+      operationId: exam_schedules_retrieve
+      tags:
+      - exam-schedules
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: exam_schedules_create
+      tags:
+      - exam-schedules
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /exam-schedules/{id}/:
+    get:
+      operationId: exam_schedules_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - exam-schedules
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: exam_schedules_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - exam-schedules
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: exam_schedules_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - exam-schedules
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /exams/:
+    get:
+      operationId: exams_retrieve
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: exams_create
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /exams/{id}/:
+    get:
+      operationId: exams_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: exams_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: exams_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /financial-categories/:
+    get:
+      operationId: financial_categories_retrieve
+      tags:
+      - financial-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: financial_categories_create
+      tags:
+      - financial-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /financial-categories/{id}/:
+    get:
+      operationId: financial_categories_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - financial-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: financial_categories_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - financial-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: financial_categories_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - financial-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /financial-transactions/:
+    get:
+      operationId: financial_transactions_retrieve
+      tags:
+      - financial-transactions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: financial_transactions_create
+      tags:
+      - financial-transactions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /financial-transactions/{id}/:
+    get:
+      operationId: financial_transactions_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - financial-transactions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: financial_transactions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - financial-transactions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: financial_transactions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - financial-transactions
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /holidays/:
+    get:
+      operationId: holidays_retrieve
+      tags:
+      - holidays
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: holidays_create
+      tags:
+      - holidays
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /holidays/{id}/:
+    get:
+      operationId: holidays_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - holidays
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: holidays_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - holidays
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: holidays_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - holidays
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /lesson-groups/:
+    get:
+      operationId: lesson_groups_retrieve
+      tags:
+      - lesson-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: lesson_groups_create
+      tags:
+      - lesson-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /lesson-groups/{id}/:
+    get:
+      operationId: lesson_groups_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - lesson-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: lesson_groups_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - lesson-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: lesson_groups_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - lesson-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /lessons/:
+    get:
+      operationId: lessons_retrieve
+      tags:
+      - lessons
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: lessons_create
+      tags:
+      - lessons
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /lessons/{id}/:
+    get:
+      operationId: lessons_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - lessons
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: lessons_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - lessons
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: lessons_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - lessons
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /pay-categories/:
+    get:
+      operationId: pay_categories_retrieve
+      tags:
+      - pay-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: pay_categories_create
+      tags:
+      - pay-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /pay-categories/{id}/:
+    get:
+      operationId: pay_categories_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - pay-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: pay_categories_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - pay-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: pay_categories_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - pay-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /permission-group-defines/:
+    get:
+      operationId: permission_group_defines_retrieve
+      tags:
+      - permission-group-defines
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: permission_group_defines_create
+      tags:
+      - permission-group-defines
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /permission-group-defines/{id}/:
+    get:
+      operationId: permission_group_defines_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - permission-group-defines
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: permission_group_defines_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - permission-group-defines
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: permission_group_defines_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - permission-group-defines
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /permission-groups/:
+    get:
+      operationId: permission_groups_retrieve
+      tags:
+      - permission-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: permission_groups_create
+      tags:
+      - permission-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /permission-groups/{id}/:
+    get:
+      operationId: permission_groups_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - permission-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: permission_groups_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - permission-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: permission_groups_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - permission-groups
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /permissions/:
+    get:
+      operationId: permissions_retrieve
+      tags:
+      - permissions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /permissions/{id}/:
+    get:
+      operationId: permissions_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - permissions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /presentation-sessions/:
+    get:
+      operationId: presentation_sessions_retrieve
+      tags:
+      - presentation-sessions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: presentation_sessions_create
+      tags:
+      - presentation-sessions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /presentation-sessions/{id}/:
+    get:
+      operationId: presentation_sessions_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation-sessions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: presentation_sessions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation-sessions
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: presentation_sessions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation-sessions
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /presentation-surveys/:
+    get:
+      operationId: presentation_surveys_retrieve
+      tags:
+      - presentation-surveys
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: presentation_surveys_create
+      tags:
+      - presentation-surveys
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /presentation-surveys/{id}/:
+    get:
+      operationId: presentation_surveys_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation-surveys
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: presentation_surveys_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation-surveys
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: presentation_surveys_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentation-surveys
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /presentations/:
+    get:
+      operationId: presentations_retrieve
+      tags:
+      - presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: presentations_create
+      tags:
+      - presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /presentations/{id}/:
+    get:
+      operationId: presentations_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: presentations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: presentations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /roles/:
+    get:
+      operationId: roles_retrieve
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: roles_create
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /roles/{id}/:
+    get:
+      operationId: roles_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: roles_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: roles_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - roles
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /roll-calls/:
+    get:
+      operationId: roll_calls_retrieve
+      tags:
+      - roll-calls
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: roll_calls_create
+      tags:
+      - roll-calls
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /roll-calls/{id}/:
+    get:
+      operationId: roll_calls_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - roll-calls
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: roll_calls_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - roll-calls
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: roll_calls_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - roll-calls
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /selected-exams/:
+    get:
+      operationId: selected_exams_retrieve
+      tags:
+      - selected-exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: selected_exams_create
+      tags:
+      - selected-exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /selected-exams/{id}/:
+    get:
+      operationId: selected_exams_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - selected-exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: selected_exams_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - selected-exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: selected_exams_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - selected-exams
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /selected-presentations/:
+    get:
+      operationId: selected_presentations_retrieve
+      tags:
+      - selected-presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: selected_presentations_create
+      tags:
+      - selected-presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /selected-presentations/{id}/:
+    get:
+      operationId: selected_presentations_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - selected-presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: selected_presentations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - selected-presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: selected_presentations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - selected-presentations
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /survey-categories/:
+    get:
+      operationId: survey_categories_retrieve
+      tags:
+      - survey-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: survey_categories_create
+      tags:
+      - survey-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /survey-categories/{id}/:
+    get:
+      operationId: survey_categories_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - survey-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: survey_categories_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - survey-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: survey_categories_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - survey-categories
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /users/:
+    get:
+      operationId: users_retrieve
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: string
+      - in: query
+        name: search
+        schema:
+          type: string
+      - in: query
+        name: size
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: users_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: users_update
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /users/{id}/:
+    get:
+      operationId: users_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /users/login-logs/:
+    get:
+      operationId: users_login_logs_retrieve
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /users/token/:
+    post:
+      operationId: users_token_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /users/token/refresh/:
+    post:
+      operationId: users_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    BuildingRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        location:
+          type: string
+          maxLength: 100
+      required:
+      - location
+      - name
+    ClassroomRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        capacity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        floor:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        lesson_group_id:
+          type: integer
+          nullable: true
+          readOnly: true
+        building_id:
+          type: integer
+          readOnly: true
+      required:
+      - building_id
+      - capacity
+      - floor
+      - lesson_group_id
+      - name
+    ClassroomUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        record_date:
+          type: string
+          format: date
+        capacity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        floor:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        lesson_group:
+          allOf:
+          - $ref: '#/components/schemas/SimpleLessonGroup'
+          readOnly: true
+        recorder:
+          allOf:
+          - $ref: '#/components/schemas/SimpleUser'
+          readOnly: true
+        lesson_group_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        recorder_id:
+          type: integer
+          writeOnly: true
+        building:
+          allOf:
+          - $ref: '#/components/schemas/SimpleBuilding'
+          readOnly: true
+        building_id:
+          type: integer
+          writeOnly: true
+      required:
+      - building
+      - capacity
+      - floor
+      - id
+      - lesson_group
+      - name
+      - record_date
+      - recorder
+    CoursePrerequisiteRequest:
+      type: object
+      properties:
+        course_id:
+          type: integer
+          writeOnly: true
+        prerequisite_id:
+          type: integer
+          writeOnly: true
+      required:
+      - course_id
+      - prerequisite_id
+    GenderEnum:
+      enum:
+      - M
+      - F
+      type: string
+      description: |-
+        * `M` - Male
+        * `F` - Female
+    SimpleBuilding:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        location:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - location
+      - name
+    SimpleLessonGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    SimplePermissionGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    SimpleRole:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    SimpleUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+        role:
+          type: integer
+          nullable: true
+        date_of_birth:
+          type: string
+          format: date
+        is_superuser:
+          type: boolean
+        is_staff:
+          type: boolean
+      required:
+      - date_of_birth
+      - first_name
+      - id
+      - last_name
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        phone_number:
+          type: string
+          pattern: ^989[0-3,9]\d{8}$
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+        father_name:
+          type: string
+          maxLength: 30
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        role:
+          allOf:
+          - $ref: '#/components/schemas/SimpleRole'
+          readOnly: true
+        date_of_birth:
+          type: string
+          format: date
+        national_code:
+          type: string
+          maxLength: 10
+        recruitment_date:
+          type: string
+          format: date
+        is_superuser:
+          type: boolean
+        is_staff:
+          type: boolean
+        is_active:
+          type: boolean
+        record_date:
+          type: string
+          format: date
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        password:
+          type: string
+          writeOnly: true
+        permission_group:
+          allOf:
+          - $ref: '#/components/schemas/SimplePermissionGroup'
+          readOnly: true
+        permission_group_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        recorder:
+          allOf:
+          - $ref: '#/components/schemas/SimpleUser'
+          readOnly: true
+        recorder_id:
+          type: integer
+          readOnly: true
+        role_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+      required:
+      - date_of_birth
+      - father_name
+      - first_name
+      - gender
+      - id
+      - last_name
+      - national_code
+      - password
+      - permission_group
+      - phone_number
+      - record_date
+      - recorder
+      - recorder_id
+      - recruitment_date
+      - role
+    UserLogin:
+      type: object
+      properties:
+        phone_number:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - phone_number
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
